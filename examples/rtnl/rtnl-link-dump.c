@@ -84,16 +84,16 @@ int main(void)
 	char buf[MNL_SOCKET_DUMP_SIZE];
 	unsigned int seq, portid;
 	struct mnl_socket *nl;
+	struct ifinfomsg *ifm;
 	struct nlmsghdr *nlh;
-	struct rtgenmsg *rt;
 	int ret;
 
 	nlh = mnl_nlmsg_put_header(buf);
 	nlh->nlmsg_type	= RTM_GETLINK;
 	nlh->nlmsg_flags = NLM_F_REQUEST | NLM_F_DUMP;
 	nlh->nlmsg_seq = seq = time(NULL);
-	rt = mnl_nlmsg_put_extra_header(nlh, sizeof(struct rtgenmsg));
-	rt->rtgen_family = AF_PACKET;
+	ifm = mnl_nlmsg_put_extra_header(nlh, sizeof(struct ifinfomsg));
+	ifm->ifi_family = AF_UNSPEC;
 
 	nl = mnl_socket_open(NETLINK_ROUTE);
 	if (nl == NULL) {
