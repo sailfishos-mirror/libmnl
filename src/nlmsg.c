@@ -531,8 +531,10 @@ EXPORT_SYMBOL void mnl_nlmsg_batch_reset(struct mnl_nlmsg_batch *b)
 {
 	if (b->overflow) {
 		struct nlmsghdr *nlh = b->cur;
-		memcpy(b->buf, b->cur, nlh->nlmsg_len);
-		b->buflen = nlh->nlmsg_len;
+		size_t len = nlh->nlmsg_len;
+
+		memmove(b->buf, b->cur, len);
+		b->buflen = len;
 		b->cur = b->buf + b->buflen;
 		b->overflow = false;
 	} else {
