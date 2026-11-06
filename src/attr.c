@@ -600,7 +600,7 @@ EXPORT_SYMBOL bool mnl_attr_put_check(struct nlmsghdr *nlh, size_t buflen,
 				      uint16_t type, size_t len,
 				      const void *data)
 {
-	if (nlh->nlmsg_len + MNL_ATTR_HDRLEN + MNL_ALIGN(len) > buflen)
+	if (MNL_ALIGN(nlh->nlmsg_len) + MNL_ATTR_HDRLEN + MNL_ALIGN(len) > buflen)
 		return false;
 	mnl_attr_put(nlh, type, len, data);
 	return true;
@@ -745,7 +745,7 @@ EXPORT_SYMBOL struct nlattr *mnl_attr_nest_start_check(struct nlmsghdr *nlh,
 						       size_t buflen,
 						       uint16_t type)
 {
-	if (nlh->nlmsg_len + MNL_ATTR_HDRLEN > buflen)
+	if (MNL_ALIGN(nlh->nlmsg_len) + MNL_ATTR_HDRLEN > buflen)
 		return NULL;
 	return mnl_attr_nest_start(nlh, type);
 }
