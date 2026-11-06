@@ -63,6 +63,9 @@ EXPORT_SYMBOL uint16_t mnl_attr_get_len(const struct nlattr *attr)
  */
 EXPORT_SYMBOL uint16_t mnl_attr_get_payload_len(const struct nlattr *attr)
 {
+	if (attr->nla_len < MNL_ATTR_HDRLEN)
+		return 0;
+
 	return attr->nla_len - MNL_ATTR_HDRLEN;
 }
 
